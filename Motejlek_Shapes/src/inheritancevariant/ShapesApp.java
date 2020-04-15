@@ -56,6 +56,7 @@ public class ShapesApp {
                     break;
                 case 9: 
                     sortByArea();
+                    break;
                 default:
                     System.out.println("Chybná volba.");
             }
@@ -138,10 +139,7 @@ public class ShapesApp {
     }
 
     private static void findWithMaxArea() {
-        if (shapes.isEmpty()) {
-            System.out.println("Seznam objektů je prázdný.");
-            return;
-        }
+        if (checkEmpty()) return;
         
         Shape max_shape = shapes.get(0);
         for (int i = 0; i < shapes.size(); i++) {
@@ -154,6 +152,8 @@ public class ShapesApp {
     }
 
     private static void getObjectInfo() {
+        if (checkEmpty()) return;
+        
         for (int i = 0; i < shapes.size(); i++) {
             System.out.println((i + 1) + ". " + shapes.get(i));
         }
@@ -167,6 +167,8 @@ public class ShapesApp {
     }
     
     private static void sortByArea() {
+        if (checkEmpty()) return;
+        
         Collections.sort(shapes);
         System.out.println("Objekty byly seřazeny podle obsahu plochy.");
     }
@@ -174,6 +176,14 @@ public class ShapesApp {
     private static void printWithArea(Shape shape) {
         System.out.println(shape + 
                 String.format(", area = %.2f", shape.computeArea()));
+    }
+    
+    private static boolean checkEmpty() {
+        if (shapes.isEmpty()) {
+            System.out.println("Seznam objektů je prázdný.");
+            return true;
+        }
+        return false;
     }
     
 }
