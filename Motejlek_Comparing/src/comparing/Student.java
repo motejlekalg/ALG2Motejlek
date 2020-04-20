@@ -5,6 +5,7 @@
  */
 package comparing;
 
+import comparing.mycomparing.CompareInterface;
 import java.util.Arrays;
 
 /**
@@ -53,11 +54,13 @@ public class Student implements CompareInterface, Comparable<Student> {
         return marksCount;
     }
     
-    public void addMarks(double... marks) {
+    public boolean addMarks(double... marks) {
+        if (marksCount + marks.length > MAX_MARKS) return false;
         for (double mark : marks) {
             this.marks[marksCount] = mark;
             marksCount++;
         }
+        return true;
     }
     
     public double calcAvgMark() {
@@ -104,6 +107,31 @@ public class Student implements CompareInterface, Comparable<Student> {
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + this.studentNumber;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (this.studentNumber != other.studentNumber) {
+            return false;
+        }
+        return true;
     }
     
 }

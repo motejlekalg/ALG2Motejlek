@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comparing;
+package comparing.mycomparing;
+
+import comparing.Datasource;
+import comparing.Student;
 
 /**
  *
@@ -17,8 +20,20 @@ public class MyComparing {
 //        System.out.println("Sort by age");
 //        sortByAge(students);
 //        print(students);
+//        System.out.println("Sort by number");
+//        sort(students);
+//        print(students);
+        System.out.println("Sort by first name");
+        sort(students, new CompareByFirstName());
+        print(students);
+        System.out.println("Sort by last name");
+        sort(students, new CompareByLastName());
+        print(students);
+        System.out.println("Sort by age");
+        sort(students, new CompareByAge());
+        print(students);
         System.out.println("Sort by number");
-        sort(students);
+        sort(students, new CompareByNumber());
         print(students);
     }
     
@@ -35,12 +50,25 @@ public class MyComparing {
 //        }
 //    }
     
-    private static void sort(CompareInterface[] array) {
+//    private static void sort(CompareInterface[] array) {
+//        // bubble sort
+//        for (int i = 0; i < array.length - 1; i++) {
+//            for (int j = 1; j < array.length - i; j++) {
+//                if (array[j - 1].isSmaller(array[j])) {
+//                    CompareInterface temp = array[j];
+//                    array[j] = array[j - 1];
+//                    array[j - 1] = temp;
+//                }
+//            }
+//        }
+//    }
+    
+    private static void sort(Object[] array, ComparatorInterface comparator) {
         // bubble sort
         for (int i = 0; i < array.length - 1; i++) {
             for (int j = 1; j < array.length - i; j++) {
-                if (array[j - 1].isSmaller(array[j])) {
-                    CompareInterface temp = array[j];
+                if (comparator.bigger(array[j - 1], array[j])) {
+                    Object temp = array[j];
                     array[j] = array[j - 1];
                     array[j - 1] = temp;
                 }

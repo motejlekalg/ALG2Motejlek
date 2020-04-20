@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comparing;
+package comparing.mycomparing;
 
 /**
  *
  * @author Martin Motejlek
  */
-public interface CompareInterface {
+public interface ComparatorInterface {
     
-    boolean isSmaller(CompareInterface o);
+    boolean bigger(Object a, Object b);
     
 }
