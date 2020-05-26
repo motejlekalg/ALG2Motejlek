@@ -13,14 +13,14 @@ public class OutputGenerator {
     
     private static final DateTimeFormatter DTF_TIMESTAMP = DateTimeFormatter.ofPattern("uuuu-mm-dd HH:mm:ss");
     
-    public static String genWarehouseTable(List<Item> list) {
+    public static String genItemsTable(List<Item> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("Warehouse");
         for (Item item : list) {
             sb.append(String.format(
-                    "%n%-10s %5d %s",
-                    item.getCode(),
+                    "%n%5d %-10s %s",
                     item.getQuantity(),
+                    item.getCode(),
                     item.getName()
             ));
         }
@@ -32,12 +32,11 @@ public class OutputGenerator {
         sb.append("Log");
         for (LogEntry entry : list) {
             sb.append(String.format(
-                    "%n%s %+5d %s (%s)%n    Description: %s",
+                    "%n%s %+6d %-10s %s %n",
                     entry.getTimestamp().format(DTF_TIMESTAMP),
                     entry.getQuantityChange(),
-                    entry.getItemName(),
                     entry.getItemCode(),
-                    entry.getDescription()
+                    entry.getItemName()
             ));
         }
         return sb.toString();

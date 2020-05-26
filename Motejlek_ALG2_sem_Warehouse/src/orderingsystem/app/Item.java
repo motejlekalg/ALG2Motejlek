@@ -28,12 +28,11 @@ public class Item implements Comparable<Item> {
         this.code = code;
         this.name = name;
     }
-
-    public void setQuantity(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative.");
-        }
-        this.quantity = quantity;
+    
+    public Item(Item item) {
+        this.code = item.getCode();
+        this.name = item.getName();
+        this.quantity = item.getQuantity();
     }
     
     public void addQuantity(int quantity) {

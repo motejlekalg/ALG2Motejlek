@@ -1,9 +1,11 @@
 package orderingsystem.app;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import orderingsystem.utils.NoSuchCodeException;
 import orderingsystem.utils.listgenerator.ListGenerator;
 
 /**
@@ -12,8 +14,25 @@ import orderingsystem.utils.listgenerator.ListGenerator;
  */
 public class Warehouse {
 
-    private Map<String, Item> items = new HashMap<>();
-    private List<LogEntry> log = new ArrayList<>();
+    private Map<String, Item> items;
+    private List<LogEntry> log;
+
+    public Warehouse() {
+        items = new HashMap<>();
+        log = new ArrayList<>();
+    }
+
+    public Warehouse(Collection<Item> items, Collection<LogEntry> log) {
+        for (Item item : items) {
+            Item copy = new Item(item);
+            if (this.items.putIfAbsent(copy.getCode(), copy) != null) {
+                throw new RuntimeException(
+                        "Invalid source data: code \"" + copy.getCode()
+                        + "\" is present multiple times.");
+            };
+        }
+        this.log = new ArrayList<>(log);
+    }
 
     public boolean addItemType(String code, String name) {
         Item entry = new Item(code, name);
@@ -22,25 +41,13 @@ public class Warehouse {
         }
         return false;
     }
-    
-    public boolean removeItemType(String code) {
-        if (items.containsKey(code)) {
-            items.remove(code);
-            return true;
-        }
-        return false;
-    }
-    
-    public List<Item> getWarehouseList(ListGenerator<Item> listGen) {
-        return listGen.generate(items.values());
-    }
-    
-    public boolean commitTransaction(String itemCode, int quantityChange, String description) {
+
+    public boolean commitTransaction(String itemCode, int quantityChange) {
         Item item = items.get(itemCode);
         if (item == null) {
-            return false;
+            throw new NoSuchCodeException("Item with code \"" + itemCode + "\" does not exist.");
         }
-        
+
         if (quantityChange > 0) {
             item.addQuantity(quantityChange);
         } else if (quantityChange < 0) {
@@ -48,14 +55,22 @@ public class Warehouse {
                 return false;
             }
         } else {
-            return false;
+            throw new IllegalArgumentException("Quantity change must be different from zero.");
         }
-        
-        log.add(new LogEntry(item.getCode(), item.getName(), quantityChange, description));
+
+        log.add(new LogEntry(item.getCode(), item.getName(), quantityChange));
         return true;
     }
-    
-    public List<LogEntry> getLog() {
+
+    public List<Item> getItemList(ListGenerator<Item> listGen) {
+        List<Item> copy = new ArrayList<>();
+        for (Item item : items.values()) {
+            copy.add(new Item(item));
+        }
+        return listGen.generate(copy);
+    }
+
+    public List<LogEntry> getLog(ListGenerator<Item> listGen) {
         return new ArrayList(log);
     }
 
