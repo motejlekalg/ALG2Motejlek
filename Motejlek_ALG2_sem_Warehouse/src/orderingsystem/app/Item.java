@@ -10,12 +10,15 @@ public class Item implements Comparable<Item> {
     private final String name;
     private int quantity;
     
-    public Item(String code, String name) {
+    public Item(String code, String name, int quantity) {
         if (code == null) {
             throw new IllegalArgumentException("Code cannot be null.");
         }
         if (code.length() == 0) {
             throw new IllegalArgumentException("Code cannot be an empty string.");
+        }
+        if (code.matches(".*[\\s]+.*")) {
+            throw new IllegalArgumentException("Code cannot contain whitespace.");
         }
         
         if (name == null) {
@@ -27,6 +30,11 @@ public class Item implements Comparable<Item> {
         
         this.code = code;
         this.name = name;
+        this.quantity = quantity;
+    }
+    
+    public Item(String code, String name) {
+        this(code, name, 0);
     }
     
     public Item(Item item) {

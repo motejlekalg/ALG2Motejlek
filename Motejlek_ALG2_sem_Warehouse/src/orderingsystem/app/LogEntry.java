@@ -13,7 +13,7 @@ public class LogEntry {
     private final String itemName;
     private final int quantityChange;
     
-    public LogEntry(String itemCode, String itemName, int quantityChange) {
+    public LogEntry(LocalDateTime timestamp, String itemCode, String itemName, int quantityChange) {
         if (itemCode == null) {
             throw new IllegalArgumentException("Code of the item cannot be null.");
         }
@@ -21,10 +21,14 @@ public class LogEntry {
             throw new IllegalArgumentException("Name of the item cannot be null.");
         }
         
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = timestamp;
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.quantityChange = quantityChange;
+    }
+    
+    public LogEntry(String itemCode, String itemName, int quantityChange) {
+        this(LocalDateTime.now().withNano(0), itemCode, itemName, quantityChange);
     }
 
     public LocalDateTime getTimestamp() {

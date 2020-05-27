@@ -11,7 +11,7 @@ import orderingsystem.app.LogEntry;
  */
 public class OutputGenerator {
     
-    private static final DateTimeFormatter DTF_TIMESTAMP = DateTimeFormatter.ofPattern("uuuu-mm-dd HH:mm:ss");
+    private static final DateTimeFormatter DTF_TIMESTAMP = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
     
     public static String genItemsTable(List<Item> list) {
         StringBuilder sb = new StringBuilder();
