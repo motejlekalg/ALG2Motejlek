@@ -10,7 +10,7 @@ import java.util.Collection;
  */
 public class ListGenerator<E> {
 
-    List<ListModifier> mods = new ArrayList<>();
+    List<ListModifier<E>> mods = new ArrayList<>();
 
     public ListGenerator add(ListModifier<E>... mods) {
         for (ListModifier<E> mod : mods) {
@@ -22,7 +22,7 @@ public class ListGenerator<E> {
         return this;
     }
 
-    public ArrayList<E> generate(Collection<E> data) {
+    public List<E> generate(Collection<E> data) {
         ArrayList<E> list = new ArrayList<>(data);
         for (ListModifier mod : mods) {
             mod.applyTo(list);

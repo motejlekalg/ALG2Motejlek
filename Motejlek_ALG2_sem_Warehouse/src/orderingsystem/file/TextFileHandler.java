@@ -12,25 +12,25 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import orderingsystem.app.Item;
 import orderingsystem.app.LogEntry;
-import orderingsystem.utils.CorruptedFileException;
+import orderingsystem.utils.CorruptedDataException;
 
 /**
  *
  * @author Martin Motejlek
  */
 public class TextFileHandler extends FileHandler {
-    
-    private static final DateTimeFormatter DTF_LOG_DATE =
-            DateTimeFormatter.ofPattern("uuuu-MM-dd");
-    private static final DateTimeFormatter DTF_LOG_TIME =
-            DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    private static final DateTimeFormatter DTF_LOG_DATE
+            = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+    private static final DateTimeFormatter DTF_LOG_TIME
+            = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @Override
-    public Collection<Item> loadItems(File file) throws IOException {
-        Collection<Item> items = new ArrayList<>();
+    public List<Item> loadItems(File file) throws IOException {
+        List<Item> itemList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -40,48 +40,46 @@ public class TextFileHandler extends FileHandler {
                 String name = parts[2];
 
                 Item item = new Item(code, name, quantity);
-                items.add(item);
+                itemList.add(item);
             }
         } catch (NumberFormatException e) {
-            throw new CorruptedFileException(e.toString());
+            throw new CorruptedDataException(e.toString());
         }
-        return items;
+        return itemList;
     }
 
     @Override
-    public Collection<LogEntry> loadTransactionLog(File file)
-            throws IOException {
-        Collection<LogEntry> log = new ArrayList<>();
+    public List<LogEntry> loadLog(File file) throws IOException {
+        List<LogEntry> log = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("[\\s]+", 5);
-                LocalDateTime timestamp =
-                        LocalDateTime.of(
+                LocalDateTime timestamp
+                        = LocalDateTime.of(
                                 LocalDate.parse(parts[0], DTF_LOG_DATE),
                                 LocalTime.parse(parts[1], DTF_LOG_TIME)
                         );
                 int quantityChange = Integer.parseInt(parts[2]);
-                String itemCode = parts[3];
-                String itemName = parts[4];
-                
-                LogEntry entry = new LogEntry(timestamp,itemCode, itemName, 
+                String code = parts[3];
+                String name = parts[4];
+
+                LogEntry entry = new LogEntry(timestamp, code, name,
                         quantityChange);
                 log.add(entry);
             }
         } catch (NumberFormatException e) {
-            throw new CorruptedFileException(e.toString());
+            throw new CorruptedDataException(e.toString());
         }
         return log;
     }
 
     @Override
-    public void writeItems(File file, Collection<Item> items)
-            throws IOException {
-        try (PrintWriter pw =
-                new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-            for (Item item : items) {
-                pw.format("%d %s %s",
+    public void writeItems(File file, List<Item> itemList) throws IOException {
+        try (PrintWriter pw
+                = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+            for (Item item : itemList) {
+                pw.format("%d %s %s%n",
                         item.getQuantity(),
                         item.getCode(),
                         item.getName());
@@ -90,20 +88,19 @@ public class TextFileHandler extends FileHandler {
     }
 
     @Override
-    public void writeTransactionLog(File file, Collection<LogEntry> log)
-            throws IOException {
-        try (PrintWriter pw =
-                new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+    public void writeLog(File file, List<LogEntry> log) throws IOException {
+        try (PrintWriter pw
+                = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
             for (LogEntry entry : log) {
-                pw.format("%s %s %+d %s %s",
+                pw.format("%s %s %+d %s %s%n",
                         entry.getTimestamp().format(DTF_LOG_DATE),
                         entry.getTimestamp().format(DTF_LOG_TIME),
                         entry.getQuantityChange(),
-                        entry.getItemCode(),
-                        entry.getItemName()
+                        entry.getCode(),
+                        entry.getName()
                 );
             }
         }
     }
-    
+
 }

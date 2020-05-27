@@ -3,48 +3,85 @@ package orderingsystem.app;
 import java.time.LocalDateTime;
 
 /**
+ * A class representing a transaction log entry.
  *
  * @author Martin Motejlek
  */
 public class LogEntry {
-    
+
     private final LocalDateTime timestamp;
-    private final String itemCode;
-    private final String itemName;
+    private final String code;
+    private final String name;
     private final int quantityChange;
-    
-    public LogEntry(LocalDateTime timestamp, String itemCode, String itemName, int quantityChange) {
-        if (itemCode == null) {
-            throw new IllegalArgumentException("Code of the item cannot be null.");
+
+    /**
+     * Log entry constructor.
+     *
+     * @param timestamp the timestamp of the log entry
+     * @param code the code of the item which was the subject of the transaction
+     * @param name the name of the item which was the subject of the transaction
+     * @param quantityChange the change in quantity
+     */
+    public LogEntry(LocalDateTime timestamp, String code, String name, int quantityChange) {
+        if (code == null) {
+            throw new IllegalArgumentException("Kód položky nesmí být null.");
         }
-        if (itemName == null) {
-            throw new IllegalArgumentException("Name of the item cannot be null.");
+        if (name == null) {
+            throw new IllegalArgumentException("Název položky nesmí být null.");
         }
-        
+
         this.timestamp = timestamp;
-        this.itemCode = itemCode;
-        this.itemName = itemName;
+        this.code = code;
+        this.name = name;
         this.quantityChange = quantityChange;
     }
-    
-    public LogEntry(String itemCode, String itemName, int quantityChange) {
-        this(LocalDateTime.now().withNano(0), itemCode, itemName, quantityChange);
+
+    /**
+     * Log entry constructor. Sets the current time with precision to seconds as
+     * the timestamp of the log entry.
+     *
+     * @param code the code of the item which was the subject of the transaction
+     * @param name the name of the item which was the subject of the transaction
+     * @param quantityChange the change in quantity
+     */
+    public LogEntry(String code, String name, int quantityChange) {
+        this(LocalDateTime.now().withNano(0), code, name, quantityChange);
     }
 
+    /**
+     * Returns the timestamp of the log entry.
+     *
+     * @return timestamp of the log entry
+     */
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public String getItemCode() {
-        return itemCode;
+    /**
+     * Returns the code of the item which was the subject of the transaction.
+     *
+     * @return the code of the item
+     */
+    public String getCode() {
+        return code;
     }
 
-    public String getItemName() {
-        return itemName;
+    /**
+     * Returns the name of the item which was the subject of the transaction.
+     *
+     * @return the name of the item
+     */
+    public String getName() {
+        return name;
     }
 
+    /**
+     * Returns the change in quantity.
+     *
+     * @return the change in quantity
+     */
     public int getQuantityChange() {
         return quantityChange;
     }
-    
+
 }

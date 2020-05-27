@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import orderingsystem.app.Item;
 import orderingsystem.app.LogEntry;
 
@@ -22,50 +22,49 @@ import orderingsystem.app.LogEntry;
 public class BinaryFileHandler extends FileHandler {
 
     @Override
-    public Collection<Item> loadItems(File file) throws IOException {
-        Collection<Item> items = new ArrayList<>();
-        try (DataInputStream dis =
-                new DataInputStream(new FileInputStream(file))) {
+    public List<Item> loadItems(File file) throws IOException {
+        List<Item> itemList = new ArrayList<>();
+        try (DataInputStream dis
+                = new DataInputStream(new FileInputStream(file))) {
             boolean isEOF = false;
             while (!isEOF) {
                 try {
                     String code = dis.readUTF();
                     String name = dis.readUTF();
                     int quantity = dis.readInt();
-                    
+
                     Item item = new Item(code, name, quantity);
-                    items.add(item);                    
+                    itemList.add(item);
                 } catch (EOFException e) {
                     isEOF = true;
                 }
             }
         }
-        return items;
+        return itemList;
     }
 
     @Override
-    public Collection<LogEntry> loadTransactionLog(File file)
-            throws IOException {
-        Collection<LogEntry> log = new ArrayList<>();
-        try (DataInputStream dis =
-                new DataInputStream(new FileInputStream(file))) {
+    public List<LogEntry> loadLog(File file) throws IOException {
+        List<LogEntry> log = new ArrayList<>();
+        try (DataInputStream dis
+                = new DataInputStream(new FileInputStream(file))) {
             boolean isEOF = false;
             while (!isEOF) {
                 try {
                     long epochDay = dis.readLong();
                     long seconds = dis.readInt();
-                    String itemCode = dis.readUTF();
-                    String itemName = dis.readUTF();
+                    String code = dis.readUTF();
+                    String name = dis.readUTF();
                     int quantityChange = dis.readInt();
-                    
-                    LocalDateTime timestamp =
-                            LocalDateTime.of(
+
+                    LocalDateTime timestamp
+                            = LocalDateTime.of(
                                     LocalDate.ofEpochDay(epochDay),
                                     LocalTime.ofSecondOfDay(seconds)
                             );
-                    LogEntry entry = new LogEntry(timestamp, itemCode, itemName,
+                    LogEntry entry = new LogEntry(timestamp, code, name,
                             quantityChange);
-                    log.add(entry);                    
+                    log.add(entry);
                 } catch (EOFException e) {
                     isEOF = true;
                 }
@@ -75,11 +74,10 @@ public class BinaryFileHandler extends FileHandler {
     }
 
     @Override
-    public void writeItems(File file, Collection<Item> items)
-            throws IOException {
-        try (DataOutputStream dos =
-                new DataOutputStream(new FileOutputStream(file))) {
-            for (Item item : items) {
+    public void writeItems(File file, List<Item> itemList) throws IOException {
+        try (DataOutputStream dos
+                = new DataOutputStream(new FileOutputStream(file))) {
+            for (Item item : itemList) {
                 dos.writeUTF(item.getCode());
                 dos.writeUTF(item.getName());
                 dos.writeInt(item.getQuantity());
@@ -88,15 +86,14 @@ public class BinaryFileHandler extends FileHandler {
     }
 
     @Override
-    public void writeTransactionLog(File file, Collection<LogEntry> log)
-            throws IOException {
-        try (DataOutputStream dos =
-                new DataOutputStream(new FileOutputStream(file))) {
+    public void writeLog(File file, List<LogEntry> log) throws IOException {
+        try (DataOutputStream dos
+                = new DataOutputStream(new FileOutputStream(file))) {
             for (LogEntry entry : log) {
                 dos.writeLong(entry.getTimestamp().toLocalDate().toEpochDay());
                 dos.writeInt(entry.getTimestamp().toLocalTime().toSecondOfDay());
-                dos.writeUTF(entry.getItemCode());
-                dos.writeUTF(entry.getItemName());
+                dos.writeUTF(entry.getCode());
+                dos.writeUTF(entry.getName());
                 dos.writeInt(entry.getQuantityChange());
             }
         }
