@@ -1,7 +1,8 @@
 package orderingsystem.utils;
 
 /**
- * An exception thrown when an unknown item code is passed as a parameter.
+ * An exception thrown when an unsupported extension is passed to a
+ * file-handling function.
  *
  * @author Martin Motejlek
  */

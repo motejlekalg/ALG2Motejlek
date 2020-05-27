@@ -28,7 +28,7 @@ public class Warehouse {
     /**
      * Warehouse constructor.
      *
-     * @param itemList initial items
+     * @param itemList a list of initial items
      * @param log initial log entries
      */
     public Warehouse(List<Item> itemList, List<LogEntry> log) {
@@ -62,10 +62,12 @@ public class Warehouse {
     /**
      * Commits a transaction. Modifies quantities of items in the warehouse and
      * generates a log entry.
+     * 
+     * A transaction fails if there are not enough items in the warehouse.
      *
-     * @param code identificator of the item
+     * @param code an identificator of the item
      * @param quantityChange change of quantity of the item
-     * @return true if the transacaction was successful, false otherwise
+     * @return true if the transacaction is successful, false otherwise
      */
     public boolean commitTransaction(String code, int quantityChange) {
         Item item = items.get(code);
@@ -87,6 +89,11 @@ public class Warehouse {
         return true;
     }
 
+    /**
+     * Returns a copy of an item from the warehouse.
+     * @param code an identificator of the item
+     * @return a copy of the specified item
+     */
     public Item getItem(String code) {
         Item item = items.get(code);
         if (item == null) {
@@ -95,6 +102,11 @@ public class Warehouse {
         return new Item(item);
     }
 
+    /**
+     * Returns a list of copies of items from the warehouse sorted
+     * alphabetically by name.
+     * @return a list of copies of items sorted by name
+     */
     public List<Item> getItemList() {
         List<Item> itemList = new ArrayList<>();
         for (Item item : items.values()) {
@@ -104,6 +116,10 @@ public class Warehouse {
         return itemList;
     }
 
+    /**
+     * Returns a copy of the warehouses' log.
+     * @return a copy of the warehouses' log
+     */
     public List<LogEntry> getLog() {
         return new ArrayList(log);
     }

@@ -14,6 +14,7 @@ import orderingsystem.utils.CorruptedDataException;
 import orderingsystem.utils.UnsupportedExtensionException;
 import orderingsystem.utils.listgenerator.FilterLogByCode;
 import orderingsystem.utils.listgenerator.ListGenerator;
+import orderingsystem.utils.listgenerator.SortItemsByQuantity;
 
 /**
  *
@@ -77,7 +78,7 @@ public class Main {
         return keepRunning;
     }
 
-    public static void viewItem(Queue<String> command) {
+    private static void viewItem(Queue<String> command) {
         if (command.peek() == null) {
             System.out.println("Nedostatek parametrů.");
             return;
@@ -93,14 +94,28 @@ public class Main {
         System.out.println(OutputGenerator.genItemRow(item));
     }
 
-    public static void viewItems(Queue<String> command) {
+    private static void viewItems(Queue<String> command) {
         ListGenerator<Item> listGen = new ListGenerator<>();
+        if (command.peek() != null) {
+            switch (command.poll()) {
+                case "sort-by-quantity":
+                    listGen.add(new SortItemsByQuantity());
+                    break;
+                default:
+                    System.out.println("Neplatný parametr.");
+                    return;
+            }
+        }
+        if (command.peek() != null) {
+            System.out.println("Příliš mnoho parametrů.");
+            return;
+        }
         System.out.println(
                 OutputGenerator.genItemsTable(listGen.generate(warehouse.getItemList()))
         );
     }
 
-    public static void viewLog(Queue<String> command) {
+    private static void viewLog(Queue<String> command) {
         ListGenerator<LogEntry> listGen = new ListGenerator<>();
         if (command.peek() != null) {
             switch (command.poll()) {
@@ -116,6 +131,10 @@ public class Main {
                     System.out.println("Neplatný parametr.");
                     return;
             }
+        }
+        if (command.peek() != null) {
+            System.out.println("Příliš mnoho parametrů.");
+            return;
         }
         System.out.println(
                 OutputGenerator.genLogTable(listGen.generate(warehouse.getLog()))
@@ -168,7 +187,6 @@ public class Main {
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            return;
         }
     }
 

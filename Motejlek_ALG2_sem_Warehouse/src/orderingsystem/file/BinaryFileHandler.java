@@ -16,7 +16,8 @@ import orderingsystem.app.Item;
 import orderingsystem.app.LogEntry;
 
 /**
- *
+ * A class which contains methods for reading and writing 
+ * 
  * @author Martin Motejlek
  */
 public class BinaryFileHandler extends FileHandler {

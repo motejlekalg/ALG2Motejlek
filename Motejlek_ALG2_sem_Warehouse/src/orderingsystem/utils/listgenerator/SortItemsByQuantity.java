@@ -5,6 +5,7 @@ import java.util.List;
 import orderingsystem.app.Item;
 
 /**
+ * A list modifier which sorts items by quantity.
  *
  * @author Martin Motejlek
  */
@@ -16,5 +17,5 @@ public class SortItemsByQuantity implements ListModifier<Item> {
             return o1.getQuantity() - o2.getQuantity();
         });
     }
-    
+
 }
