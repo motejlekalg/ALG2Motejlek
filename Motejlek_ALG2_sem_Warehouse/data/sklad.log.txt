@@ -1,0 +1,22 @@
+2020-05-28 21:30:02 +20 ananas Ananas
+2020-05-28 21:30:07 +10 paprika Paprika
+2020-05-28 21:30:12 +15 rajce Rajče
+2020-05-28 21:30:24 +3 pomeranc Pomeranč
+2020-05-28 21:30:34 -5 ananas Ananas
+2020-05-28 21:30:40 +13 cibule Cibule
+2020-05-28 21:31:00 +100 mrkev Mrkev
+2020-05-28 21:31:08 +40 okurka Okurka
+2020-05-28 21:31:14 +20 zeli-hl Zelí hlávkové
+2020-05-28 21:31:23 +18 pomeranc Pomeranč
+2020-05-28 21:31:31 +42 jablko Jablko
+2020-05-28 21:31:38 -13 jablko Jablko
+2020-05-28 21:31:43 +1 kokos Kokosový ořech
+2020-05-28 21:31:50 +20 meloun Meloun
+2020-05-28 21:31:54 -6 mrkev Mrkev
+2020-05-28 21:32:00 -43 mrkev Mrkev
+2020-05-28 21:32:07 +28 mrkev Mrkev
+2020-05-28 21:32:17 +30 banan Banán
+2020-05-28 21:32:49 +5 okurka Okurka
+2020-05-28 21:32:54 -8 okurka Okurka
+2020-05-28 21:33:01 +3 jablko Jablko
+2020-05-28 21:33:15 -19 mrkev Mrkev

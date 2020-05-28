@@ -17,20 +17,27 @@ import orderingsystem.utils.listgenerator.ListGenerator;
 import orderingsystem.utils.listgenerator.SortItemsByQuantity;
 
 /**
- *
+ * Application UI.
  * @author Martin Motejlek
  */
 public class Main {
 
-    private static Scanner sc = new Scanner(System.in);
+    private static final String INPUT_ENCODING = "Windows-1250";
+    
+    private static Scanner sc = new Scanner(System.in, INPUT_ENCODING);
     private static Warehouse warehouse = new Warehouse();
 
+    /**
+     * Starts the application.
+     * @param args unused
+     */
     public static void main(String[] args) {
         inputLoop();
     }
 
     private static void inputLoop() {
         boolean keepRunning = true;
+        System.out.println("Zadejte příkaz \"help\" pro vypsání nápovědy.");
         while (keepRunning) {
             Queue<String> command = getInput();
             keepRunning = execute(command);
@@ -67,7 +74,7 @@ public class Main {
                 save(command);
                 break;
             case "help":
-                help(command);
+                help();
                 break;
             case "exit":
                 keepRunning = false;
@@ -84,6 +91,10 @@ public class Main {
             return;
         }
         String code = command.poll();
+        if (command.peek() != null) {
+            System.out.println("Příliš mnoho parametrů.");
+            return;
+        }
         Item item;
         try {
             item = warehouse.getItem(code);
@@ -208,6 +219,7 @@ public class Main {
             System.out.println(e.getMessage());
         } catch (FileNotFoundException e) {
             System.out.println("Zadaný soubor neexistuje.");
+            System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println("Chyba při čtení.");
         }
@@ -231,8 +243,27 @@ public class Main {
         }
     }
 
-    private static void help(Queue<String> command) {
-        
+    private static void help() {
+        System.out.println("Seznam příkazů:");
+        System.out.println("load <název> <koncovka>");
+        System.out.println("    Načte soubory <název>.items.<koncovka> a <název>.log.<koncovka>.");
+        System.out.println("save <název> <koncovka>");
+        System.out.println("    Uloží soubory <název>.items.<koncovka> a <název>.log.<koncovka>.");
+        System.out.println("item <kód>");
+        System.out.println("    Vypíše informace o zvolené položce.");
+        System.out.println("items [sort-by-quantity]");
+        System.out.println("    Vypíše informace o všech položkách setříděné abecedně podle názvu.");
+        System.out.println("    sort-by-quantity : setřídí vzestupně podle počtu kusů");
+        System.out.println("log [filter-code <kód>]");
+        System.out.println("    Vypíše log transakcí setříděný vzestupně podle času.");
+        System.out.println("    filter-code : vypíše pouze transakce položky se zadaným kódem");
+        System.out.println("add <kód> <název>");
+        System.out.println("    Zaeviduje novou položku do skladu. Název může být víceslovný.");
+        System.out.println("change <kód> <změna množství>");
+        System.out.println("    Provede transakci. Záporné množství pro transakci směrem ze skladu,");
+        System.out.println("    kladné množství pro transakci směrem do skladu.");
+        System.out.println("help");
+        System.out.println("    Vypíše tuto nápovědu.");
     }
-
+    
 }

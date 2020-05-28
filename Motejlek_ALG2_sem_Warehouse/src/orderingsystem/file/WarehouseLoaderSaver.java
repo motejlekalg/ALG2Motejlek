@@ -9,7 +9,8 @@ import orderingsystem.app.Warehouse;
 import orderingsystem.utils.UnsupportedExtensionException;
 
 /**
- *
+ * Static class for loading and saving warehouse state.
+ * 
  * @author Martin Motejlek
  */
 public class WarehouseLoaderSaver {
@@ -40,6 +41,16 @@ public class WarehouseLoaderSaver {
         }
     }
 
+    /**
+     * Loads warehouse data from files
+     * name.items.extension
+     * name.log.extension
+     * 
+     * @param name
+     * @param extension
+     * @return an instance of Warehouse
+     * @throws IOException 
+     */
     public static Warehouse load(String name, String extension) throws IOException {
         FileHandler fh = getFileHandler(extension);
 
@@ -52,6 +63,16 @@ public class WarehouseLoaderSaver {
         return new Warehouse(itemList, log);
     }
 
+    /**
+     * Saves warehouse data to files
+     * name.items.extension
+     * name.log.extension
+     * 
+     * @param name
+     * @param extension
+     * @param warehouse an instance of Warehouse to save
+     * @throws IOException 
+     */
     public static void save(String name, String extension,
             Warehouse warehouse) throws IOException {
         FileHandler fh = getFileHandler(extension);

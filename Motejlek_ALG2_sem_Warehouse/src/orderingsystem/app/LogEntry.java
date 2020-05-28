@@ -16,6 +16,8 @@ public class LogEntry {
 
     /**
      * Log entry constructor.
+     * 
+     * Parameters cannot be null.
      *
      * @param timestamp the timestamp of the log entry
      * @param code the code of the item which was the subject of the transaction
@@ -23,6 +25,9 @@ public class LogEntry {
      * @param quantityChange the change in quantity
      */
     public LogEntry(LocalDateTime timestamp, String code, String name, int quantityChange) {
+        if (timestamp == null) {
+            throw new IllegalArgumentException("Čas nesmí být null.");
+        }
         if (code == null) {
             throw new IllegalArgumentException("Kód položky nesmí být null.");
         }
@@ -39,6 +44,8 @@ public class LogEntry {
     /**
      * Log entry constructor. Sets the current time with precision to seconds as
      * the timestamp of the log entry.
+     * 
+     * Parameters cannot be null.
      *
      * @param code the code of the item which was the subject of the transaction
      * @param name the name of the item which was the subject of the transaction

@@ -15,7 +15,7 @@ public class Item implements Comparable<Item> {
      * Item constructor.
      *
      * Code cannot be empty and it cannot contain whitespace. Name cannot be
-     * empty. Parameters cannot be null.
+     * empty. Quantity cannot be negative. Parameters cannot be null.
      *
      * @param code code of the item
      * @param name name of the item
@@ -23,20 +23,24 @@ public class Item implements Comparable<Item> {
      */
     public Item(String code, String name, int quantity) {
         if (code == null) {
-            throw new IllegalArgumentException("Code cannot be null.");
+            throw new IllegalArgumentException("Kód nesmí být null.");
         }
         if (code.length() == 0) {
-            throw new IllegalArgumentException("Code cannot be an empty string.");
+            throw new IllegalArgumentException("Kód nesmí být prázdný řetězec.");
         }
         if (code.matches(".*[\\s]+.*")) {
-            throw new IllegalArgumentException("Code cannot contain whitespace.");
+            throw new IllegalArgumentException("Kód nesmí obsahovat bílé znaky.");
         }
 
         if (name == null) {
-            throw new IllegalArgumentException("Name cannot be null.");
+            throw new IllegalArgumentException("Název nesmí být null.");
         }
         if (name.length() == 0) {
-            throw new IllegalArgumentException("Name cannot be an empty string.");
+            throw new IllegalArgumentException("Název nesmí být prázdný řetězec.");
+        }
+        
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Množství nesmí být záporné.");
         }
 
         this.code = code;
@@ -69,7 +73,8 @@ public class Item implements Comparable<Item> {
     }
 
     /**
-     * Increases the quantity of the item.
+     * Increases the quantity of the item. The change of quantity cannot be
+     * negative.
      *
      * @param quantity an increase in quantity
      */
@@ -82,7 +87,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * Reduces the quantity of the item unless the resulting quantity would be
-     * negative.
+     * negative. The change of quantity cannot be negative.
      *
      * @param quantity a decrease in quantity
      * @return true if successful, false otherwise
@@ -126,16 +131,17 @@ public class Item implements Comparable<Item> {
     }
 
     /**
-     * Compares two instances of Item by name.
+     * Compares two instances of Item by name. Ignores case.
      *
      * @param o Item to compare
      * @return 0 if the names are lexicographically equal, a value less than 0
      * if the name of this item is lexicographically less, and a value greater
-     * than 0 if the name of this item is lexicographically greater
+     * than 0 if the name of this item is lexicographically greater (all options
+     * ignoring case)
      */
     @Override
     public int compareTo(Item o) {
-        return this.name.compareTo(o.name);
+        return this.name.compareToIgnoreCase(o.name);
     }
 
 }

@@ -18,7 +18,8 @@ import orderingsystem.app.LogEntry;
 import orderingsystem.utils.CorruptedDataException;
 
 /**
- *
+ * A class which loads and saves warehouse-related data using text files.
+ * 
  * @author Martin Motejlek
  */
 public class TextFileHandler extends FileHandler {
@@ -73,7 +74,7 @@ public class TextFileHandler extends FileHandler {
         }
         return log;
     }
-
+    
     @Override
     public void writeItems(File file, List<Item> itemList) throws IOException {
         try (PrintWriter pw

@@ -45,7 +45,7 @@ public class Warehouse {
     }
 
     /**
-     * Introduces a new type of item to the warehouse.
+     * Introduces a new item to the warehouse.
      *
      * @param code item code used as identificator
      * @param name name of the item
@@ -66,7 +66,7 @@ public class Warehouse {
      * A transaction fails if there are not enough items in the warehouse.
      *
      * @param code an identificator of the item
-     * @param quantityChange change of quantity of the item
+     * @param quantityChange change in quantity of the item
      * @return true if the transacaction is successful, false otherwise
      */
     public boolean commitTransaction(String code, int quantityChange) {
@@ -82,7 +82,7 @@ public class Warehouse {
                 return false;
             }
         } else {
-            throw new IllegalArgumentException("Změna počtu kusů musí být různá od 0.");
+            throw new IllegalArgumentException("Změna množství musí být různá od 0.");
         }
 
         log.add(new LogEntry(item.getCode(), item.getName(), quantityChange));

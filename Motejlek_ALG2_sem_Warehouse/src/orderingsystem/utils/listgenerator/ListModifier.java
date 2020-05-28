@@ -3,7 +3,8 @@ package orderingsystem.utils.listgenerator;
 import java.util.List;
 
 /**
- *
+ * An interface for creating classes which process lists.
+ * 
  * @author Martin Motejlek
  */
 public interface ListModifier<E> {

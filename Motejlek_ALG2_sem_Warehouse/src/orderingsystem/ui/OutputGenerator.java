@@ -40,9 +40,9 @@ public class OutputGenerator {
      */
     public static String genItemRow(Item item) {
         return String.format(
-                "%-10s %5d %s",
-                item.getCode(),
+                "%5d %-10s %s",
                 item.getQuantity(),
+                item.getCode(),
                 item.getName()
         );
     }

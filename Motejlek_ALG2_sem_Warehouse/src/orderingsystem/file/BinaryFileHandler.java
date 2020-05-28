@@ -16,7 +16,7 @@ import orderingsystem.app.Item;
 import orderingsystem.app.LogEntry;
 
 /**
- * A class which contains methods for reading and writing 
+ * A class which loads and saves warehouse-related data using binary files.
  * 
  * @author Martin Motejlek
  */
