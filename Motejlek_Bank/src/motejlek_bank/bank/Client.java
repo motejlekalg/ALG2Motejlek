@@ -15,7 +15,7 @@ public abstract class Client {
     
     // data
     String name;
-    ArrayList<Account> accounts = new ArrayList();
+    ArrayList<Account> accounts = new ArrayList<>();
     
     // constructor
     public Client(String name) {
