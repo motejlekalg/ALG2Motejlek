@@ -1,6 +1,7 @@
 package competition.utils;
 
 import competition.app.Runner;
+import competition.filehandling.DataSource;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -23,7 +24,8 @@ public class ReadResult {
     }
     
     public static void readResult(String resultFilepath) throws FileNotFoundException, IOException {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(resultFilepath))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(
+                DataSource.convertPath(resultFilepath)))) {
             boolean isEnd = false;
             System.out.println(dis.readUTF());
             while(!isEnd) {

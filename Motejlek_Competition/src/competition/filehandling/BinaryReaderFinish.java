@@ -20,7 +20,8 @@ public class BinaryReaderFinish extends ReaderFinish {
     public List<FinishStat> loadData(String finishFilepath) throws FileNotFoundException, IOException {
         ArrayList<FinishStat> stats = new ArrayList<>();
         
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(finishFilepath))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(
+                DataSource.convertPath(finishFilepath)))) {
             boolean isEnd = false;
             while(!isEnd) {
                 try {

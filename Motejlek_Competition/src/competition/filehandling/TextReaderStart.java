@@ -19,7 +19,7 @@ public class TextReaderStart extends ReaderStart {
         // nacitani pomoci Scanneru
         List<Runner> runners = new ArrayList<>();
         
-        File startFile = new File(startFilepath);
+        File startFile = DataSource.convertPath(startFilepath);
         Scanner inStart = new Scanner(startFile);
         
         while(inStart.hasNext()) {

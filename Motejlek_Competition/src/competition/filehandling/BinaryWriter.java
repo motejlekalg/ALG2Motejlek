@@ -14,7 +14,8 @@ public class BinaryWriter extends Writer {
 
     @Override
     public void saveResults(String resultFilepath, List<Runner> runners) throws IOException {
-        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream (resultFilepath)))  {
+        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream(
+                DataSource.convertPath(resultFilepath))))  {
             dos.writeUTF("Nové výsledky");
             int n = 1;
             for (Runner runner : runners) {

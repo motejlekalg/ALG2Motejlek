@@ -19,7 +19,8 @@ public class BinaryReaderStart extends ReaderStart {
     public List<Runner> loadData(String startFilepath) throws FileNotFoundException, IOException {
         List<Runner> runners = new ArrayList<>();
  
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(startFilepath))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(
+                DataSource.convertPath(startFilepath)))) {
             boolean isEnd = false;
             while(!isEnd) {
                 try {

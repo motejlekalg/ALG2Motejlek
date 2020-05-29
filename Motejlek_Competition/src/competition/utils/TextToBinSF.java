@@ -2,6 +2,7 @@ package competition.utils;
 
 import competition.app.FinishStat;
 import competition.app.Runner;
+import competition.filehandling.DataSource;
 import competition.filehandling.TextReaderFinish;
 import competition.filehandling.TextReaderStart;
 import java.io.DataOutputStream;
@@ -31,7 +32,8 @@ public class TextToBinSF {
     }
 
     private static void writeBinStart(String binStart, List<Runner> runners) throws IOException {
-        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream (binStart)))  {
+        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream (
+                DataSource.convertPath(binStart))))  {
             for (Runner runner : runners) {
                dos.writeInt(runner.getNumber());
                dos.writeUTF(runner.getFirstName());
@@ -42,7 +44,8 @@ public class TextToBinSF {
     }
     
     private static void writeBinFinish(String binFinish, List<FinishStat> stats) throws IOException {
-        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream (binFinish)))  {
+        try(DataOutputStream dos = new DataOutputStream(new FileOutputStream (
+                DataSource.convertPath(binFinish))))  {
             for (FinishStat stat : stats) {
                dos.writeInt(stat.getNumber());
                dos.writeLong(stat.getFinishTime().toNanoOfDay());

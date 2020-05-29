@@ -3,7 +3,6 @@ package competition.filehandling;
 import competition.app.FinishStat;
 import competition.app.Runner;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,8 +21,8 @@ public class TextReaderFinish extends ReaderFinish {
         ArrayList<FinishStat> stats = new ArrayList<>();
         
         // nacitani pomoci BufferedReader
-        File finishFile = new File(finishFilepath);
-        try (BufferedReader inFinish = new BufferedReader(new FileReader(finishFile))) {
+        try (BufferedReader inFinish = new BufferedReader(new FileReader(
+                DataSource.convertPath(finishFilepath)))) {
             String line;
             while ((line = inFinish.readLine()) != null) {
                 String[] parts = line.split("[ ]+");
