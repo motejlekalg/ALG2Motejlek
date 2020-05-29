@@ -23,6 +23,7 @@ public class Help extends Command {
         {"dir [-o]", "Order the displayed contents"},
         {"dir [-e] [file extension]", "Display files with a specified extension"},
         {"dir [-s] [size]", "Display files bigger than the specified size (in bytes)"},
+        {"rdir", "Recursively prints directory structure under the current working directory"},
         {"mkdir", "Create a directory"},
         {"print", "Prints all passed command parameters"},
         {"rename", "Rename a file or a directory"},
