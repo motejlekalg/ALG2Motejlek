@@ -26,7 +26,7 @@ public class Main {
         double areaAll = c1.computeArea() + c2.computeArea() + r1.computeArea() + s1.computeArea();
         
         // 2
-        ArrayList<ShapeInterface> shapes = new ArrayList();
+        ArrayList<ShapeInterface> shapes = new ArrayList<>();
         shapes.add(c1);
         shapes.add(c2);
         shapes.add(r1);
@@ -42,7 +42,7 @@ public class Main {
         }
         
         // 3
-        ArrayList<ShapeInterface> shapes1 = new ArrayList();
+        ArrayList<ShapeInterface> shapes1 = new ArrayList<>();
         shapes1.add(c1);
         shapes1.add(c2);
         shapes1.add(r1);

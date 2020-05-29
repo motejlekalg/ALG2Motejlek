@@ -16,7 +16,7 @@ import java.util.Collections;
 public class ShapesApp {
     
     public static Scanner sc = new Scanner(System.in);
-    public static ArrayList<Shape> shapes = new ArrayList();
+    public static ArrayList<Shape> shapes = new ArrayList<>();
 
     /**
      * @param args the command line arguments
