@@ -7,12 +7,17 @@ package cmd.command;
 
 import cmd.Command;
 import cmd.CommandOutput;
-import cmd.tools.ComparatorFilesByName;
+import cmd.tools.FileListFilterByExtension;
+import cmd.tools.FileListFilterByLength;
+import cmd.tools.FileListManipulator;
+import cmd.tools.FileListOrderByName;
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,23 +26,16 @@ import java.util.List;
  */
 public class Dir extends Command {
     
+    private static final int LAST_MODIFIED_COL_WIDTH = 19;
     private static final int SIZE_COL_WIDTH = 12;
+    private static final String LIST_FORMAT =
+            "%n%1s %-" + LAST_MODIFIED_COL_WIDTH + "s %" + SIZE_COL_WIDTH + "s %s";
     
-    private static final SimpleDateFormat dateFormatter = 
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMATTER
+            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
-    // purely a container, no encapsulation
-    private static class Parameters {
-        boolean orderByName = false;
-
-        boolean filterExtension = false;
-        String extension;
-
-        boolean filterLarger = false;
-        int size;
-    }
-    
-    private static CommandOutput dir(File workingDir, Parameters p) {
+    private static CommandOutput dir(
+            File workingDir, List<FileListManipulator> f) {
         if (!workingDir.isDirectory()) {
             return new CommandOutput(
                     String.format(
@@ -47,9 +45,9 @@ public class Dir extends Command {
             );
         }
         
-        File[] filesArray = workingDir.listFiles();
+        File[] files = workingDir.listFiles();
         
-        if (filesArray == null) {
+        if (files == null) {
             return new CommandOutput(
                     String.format(
                             "Contents of \"%s\" cannot be shown.",
@@ -58,58 +56,38 @@ public class Dir extends Command {
             );
         }
         
-        LinkedList<File> files = new LinkedList();
-        Collections.addAll(files, filesArray);
+        files = modifyList(files, f);
         
-        if (p.filterExtension) {
-            filterExtension(files, p.extension);
-        }
-        
-        if (p.filterLarger) {
-            filterLarger(files, p.size);
-        }
-        
-        if (p.orderByName) {
-            orderByName(files);
-        }
-        
-        File[] filesArray2 = new File[files.size()];
-        files.toArray(filesArray2);
-        return new CommandOutput(
-                createList(workingDir.getPath(), filesArray2)
-        );
+        return new CommandOutput(createListString(workingDir.getPath(), files));
     }
     
-    private static void filterExtension(List<File> files, String extension) {
-        String regexp = ".*\\." + extension;
-        for (int i = files.size() - 1; i >= 0; i--) {
-            if (files.get(i).isDirectory() ||
-                    !files.get(i).getName().matches(regexp)) {
-                files.remove(i);
+    private static File[] modifyList(
+            File[] filesArray, List<FileListManipulator> f) {
+        if (!f.isEmpty()) {
+            ArrayList<File> files = new ArrayList<>();
+            Collections.addAll(files, filesArray);
+            for (FileListManipulator i : f) {
+                i.execute(files);
             }
+            return files.toArray(new File[files.size()]);
         }
+        return filesArray;
     }
     
-    private static void filterLarger(List<File> files, int size) {
-        for (int i = files.size() - 1; i >= 0; i--) {
-            if (files.get(i).isDirectory() || files.get(i).length() < size) {
-                files.remove(i);
-            }
-        }
-    }
-    
-    private static void orderByName(List files) {
-        Collections.sort(files, new ComparatorFilesByName());
-    }
-    
-    private static String createList(String dirName, File[] files) {
+    private static String createListString(String dirName, File[] files) {
         StringBuilder sb = new StringBuilder("");
         sb.append(String.format("Directory: %s", dirName));
-        for (File file : files) {            
+        sb.append(String.format(
+                    LIST_FORMAT,
+                    "T", "LAST MODIFIED", "SIZE", "NAME"));
+        for (File file : files) {
             sb.append(String.format(
-                    "%n%1s %s %" + SIZE_COL_WIDTH + "s %s",
+                    LIST_FORMAT,
                     file.isDirectory() ? "d" : "-",
-                    dateFormatter.format(new Date(file.lastModified())),
+                    LocalDateTime.ofInstant(
+                            Instant.ofEpochMilli(file.lastModified()),
+                            ZoneId.systemDefault()
+                    ).format(DATE_FORMATTER),
                     file.isDirectory() ? "-" : file.length(),
                     file.getName()
                     ));
@@ -119,13 +97,13 @@ public class Dir extends Command {
     
     @Override
     public CommandOutput execute(File workingDir) {
-        Parameters p = new Parameters();
+        ArrayList<FileListManipulator> f = new ArrayList<>();
         
         boolean invalidParameters = false;
         if (params.length == 2) {
             switch (params[1]) {
                 case "-o":
-                    p.orderByName = true;
+                    f.add(new FileListOrderByName());
                     break;
                 default:
                     invalidParameters = true;
@@ -133,13 +111,13 @@ public class Dir extends Command {
         } else if (params.length == 3) {
             switch (params[1]) {
                 case "-e":
-                    p.filterExtension = true;
-                    p.extension = params[2];
+                    f.add(new FileListFilterByExtension(params[2]));
                     break;
                 case "-s":
-                    p.filterLarger = true;
                     try {
-                        p.size = Integer.parseInt(params[2]);
+                        f.add(new FileListFilterByLength(
+                                Integer.parseInt(params[2]),
+                                true, true));
                     } catch (NumberFormatException e) {
                         invalidParameters = true;
                     }
@@ -155,7 +133,7 @@ public class Dir extends Command {
             return new CommandOutput("Invalid parameters.");
         }
         
-        return dir(workingDir, p);
+        return dir(workingDir, f);
     }
     
 }

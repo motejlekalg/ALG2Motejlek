@@ -7,7 +7,7 @@ package cmd;
 
 import cmd.tools.InvalidCommandException;
 import cmd.tools.MalformedCommandException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  *
@@ -41,7 +41,7 @@ public class Parser {
     
     private static String[] process(String line)
             throws MalformedCommandException {
-        LinkedList<String> params = new LinkedList();
+        ArrayList<String> params = new ArrayList<>();
         StringBuilder param = new StringBuilder();
         char c;
         
@@ -104,9 +104,7 @@ public class Parser {
             throw new MalformedCommandException("Missing closing quotation marks.");
         }
         
-        String[] paramsArray = new String[params.size()];
-        params.toArray(paramsArray);
-        return paramsArray;
+        return params.toArray(new String[params.size()]);
     }
     
     private Parser() {};
